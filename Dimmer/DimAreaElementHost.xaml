@@ -1,0 +1,15 @@
+﻿<Window x:Class="DimAreaElementHost"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Zumwani.Dimmer"
+        Left="{Binding DimArea.Left, Mode=TwoWay}" Top="{Binding DimArea.Top, Mode=TwoWay}"
+        Width="{Binding _Width, Mode=TwoWay}" Height="{Binding _Height, Mode=TwoWay}"
+        Topmost="True" AllowsTransparency="True" ShowInTaskbar="False"
+        ResizeMode="NoResize" WindowStyle="None"
+        Background="{x:Null}"
+        Loaded="Window_Loaded" DragEnter="Window_DragEnter"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" AllowDrop="True" Title="Dimmer">
+
+    <local:DimAreaElement x:Name="DimAreaElement"/>
+    
+</Window>

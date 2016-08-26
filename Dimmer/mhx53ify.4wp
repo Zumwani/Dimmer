@@ -1,0 +1,342 @@
+﻿Imports System.Xml
+Imports System.Xml.Serialization
+Imports System.IO
+Imports System.Drawing.Drawing2D
+Imports System.ComponentModel
+Imports System.Reflection
+
+<XmlRoot("DimArea")>
+Public NotInheritable Class DimArea
+    Inherits DependencyObject
+    Implements INotifyPropertyChanged
+
+    Public Event PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Implements INotifyPropertyChanged.PropertyChanged
+
+    '--Stores information about--
+    'Name
+    'Bounds
+    'Color
+    'Opacity
+    'DimDelay
+    'Transition
+    'TransitionDuration
+    'HideMouse
+    'MouseHideDelay
+    'UndimAtMouseMove
+
+    Private ReadOnly _UID As Guid
+    <XmlAttribute("UID")>
+    Public ReadOnly Property UID(Optional IgnoreGlobal As Boolean = False) As Guid
+        Get
+            Return _UID
+        End Get
+    End Property
+
+    Public Enum TransitionEnum
+        None = 0
+        FadeIn = 1
+    End Enum
+
+#Region "Constructors"
+
+    Private Sub New()
+    End Sub
+
+    Private Sub New(Name As String, UID As Guid, Bounds As Rect, Color As Color?, Opacity As Double?, DimDelay As TimeSpan?, Transition As TransitionEnum?, TransitionDuration As Duration?, HideMouse As Boolean?, MouseHideDelay As TimeSpan?, UndimAtMouseMove As Boolean?)
+        Me.Name = Name
+        Me._UID = UID
+        Me.Bounds = Bounds
+        Me.Color = Color
+        Me.Opacity = Opacity
+        Me.DimDelay = DimDelay
+        Me.Transition = Transition
+        Me.TransitionDuration = TransitionDuration
+        Me.HideMouse = HideMouse
+        Me.MouseHideDelay = MouseHideDelay
+        Me.UndimAtMouseMove = UndimAtMouseMove
+    End Sub
+
+    Public Shared Function CreateNew(Name As String, Bounds As Rect, Color As Color?, Opacity As Double?, DimDelay As TimeSpan?, Transition As TransitionEnum?, TransitionDuration As Duration?, HideMouse As Boolean?, MouseHideDelay As TimeSpan?, UndimAtMouseMove As Boolean?) As DimArea
+        Return New DimArea(Name, Guid.NewGuid, Bounds, Color, Opacity, DimDelay, Transition, TransitionDuration, HideMouse, MouseHideDelay, UndimAtMouseMove)
+    End Function
+
+    Public Shared Function CreateNew(Name As String) As DimArea
+        Dim b As New Rect((SystemParameters.FullPrimaryScreenWidth / 2) - 100, (SystemParameters.FullPrimaryScreenHeight / 2) - 100, 200, 200)
+        Return CreateNew(Name, b, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing)
+    End Function
+
+    Public Shared Function FromDisk(File As FileInfo, Optional ThrowError As Boolean = False) As DimArea
+        Try
+            Return Load(File)
+        Catch ex As ArgumentException
+
+            MessageBox.Show("Could not load dimarea '" + Path.GetFileNameWithoutExtension(File.FullName) + "':" + vbNewLine + _
+                ex.InnerException.Message)
+
+            If ThrowError Then
+                Throw ex
+            Else
+                Return Nothing
+            End If
+
+        End Try
+    End Function
+
+    Public Shared Function FromDisk(File As String, Optional ThrowError As Boolean = False) As DimArea
+        Try
+            Return FromDisk(New FileInfo(File), True)
+        Catch ex As ArgumentException
+            If ThrowError Then
+                Throw ex
+            Else
+                Return Nothing
+            End If
+        End Try
+    End Function
+
+#End Region
+#Region "Properties"
+
+    Private _Name As String
+    Private _Bounds As Rect
+    Private _Color As Color?
+    Private _Opacity As Double?
+    Private _DimDelay As TimeSpan?
+    Private _Transition As TransitionEnum?
+    Private _TransitionDuration As Duration?
+    Private _HideMouse As Boolean?
+    Private _MouseHideDelay As TimeSpan?
+    Private _UndimAtMouseMove As Boolean?
+
+    <XmlAttribute("Name")>
+    Public Property Name(Optional IgnoreGlobal As Boolean = False) As String
+        Get
+            Return _Name
+        End Get
+        Set(value As String)
+            _Name = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Name"))
+        End Set
+    End Property
+
+
+    <XmlAttribute("Bounds")>
+    Public Property Bounds(Optional IgnoreGlobal As Boolean = False) As Rect
+        Get
+            Return _Bounds
+        End Get
+        Set(value As Rect)
+            _Bounds = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Bounds"))
+        End Set
+    End Property
+
+
+    <XmlAttribute("Color")>
+    Public Property Color(Optional IgnoreGlobal As Boolean = False) As Color?
+        Get
+            If Not IgnoreGlobal AndAlso _Color IsNot Nothing Then
+                Return My.Settings.GlobalColor
+            Else
+                Return _Color
+            End If
+        End Get
+        Set(value As Color?)
+            _Color = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Color"))
+        End Set
+    End Property
+
+    <XmlAttribute("Opacity")>
+    Public Property Opacity(Optional IgnoreGlobal As Boolean = False) As Double?
+        Get
+            If Not IgnoreGlobal AndAlso _Opacity IsNot Nothing Then
+                Return My.Settings.GlobalOpacity
+            Else
+                Return _Opacity
+            End If
+        End Get
+        Set(value As Double?)
+            _Opacity = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Opacity"))
+        End Set
+    End Property
+
+    <XmlAttribute("DimDelay")>
+    Public Property DimDelay(Optional IgnoreGlobal As Boolean = False) As TimeSpan?
+        Get
+            If Not IgnoreGlobal AndAlso _DimDelay IsNot Nothing Then
+                Return My.Settings.GlobalDimDelay
+            Else
+                Return _DimDelay
+            End If
+        End Get
+        Set(value As TimeSpan?)
+            _DimDelay = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("DimDelay"))
+        End Set
+    End Property
+
+
+    <XmlAttribute("Transition")>
+    Public Property Transition(Optional IgnoreGlobal As Boolean = False) As TransitionEnum?
+        Get
+            If Not IgnoreGlobal AndAlso _Transition IsNot Nothing Then
+                Return My.Settings.GlobalTransition
+            Else
+                Return _Transition
+            End If
+        End Get
+        Set(value As TransitionEnum?)
+            _Transition = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Transition"))
+        End Set
+    End Property
+
+    <XmlAttribute("TransitionDuration")>
+    Public Property TransitionDuration(Optional IgnoreGlobal As Boolean = False) As Duration?
+        Get
+            If Not IgnoreGlobal AndAlso _TransitionDuration IsNot Nothing Then
+                Return My.Settings.GlobalTransitionDuration
+            Else
+                Return _TransitionDuration
+            End If
+        End Get
+        Set(value As Duration?)
+            _TransitionDuration = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("TransitionDuration"))
+        End Set
+    End Property
+
+
+    <XmlAttribute("HideMouse")>
+    Public Property HideMouse(Optional IgnoreGlobal As Boolean = False) As Boolean?
+        Get
+            If Not IgnoreGlobal AndAlso _HideMouse IsNot Nothing Then
+                Return My.Settings.GlobalHideMouse
+            Else
+                Return _HideMouse
+            End If
+        End Get
+        Set(value As Boolean?)
+            _HideMouse = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("HideMouse"))
+        End Set
+    End Property
+
+    <XmlAttribute("MouseHideDelay")>
+    Public Property MouseHideDelay(Optional IgnoreGlobal As Boolean = False) As TimeSpan?
+        Get
+            If Not IgnoreGlobal AndAlso _MouseHideDelay IsNot Nothing Then
+                Return My.Settings.GlobalMouseHideDelay
+            Else
+                Return _MouseHideDelay
+            End If
+        End Get
+        Set(value As TimeSpan?)
+            _MouseHideDelay = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("MouseHideDelay"))
+        End Set
+    End Property
+
+    <XmlAttribute("UndimAtMouseMove")>
+    Public Property UndimAtMouseMove(Optional IgnoreGlobal As Boolean = False) As Boolean?
+        Get
+            If Not IgnoreGlobal AndAlso _UndimAtMouseMove IsNot Nothing Then
+                Return My.Settings.GlobalUndimAtMouseMove
+            Else
+                Return _UndimAtMouseMove
+            End If
+        End Get
+        Set(value As Boolean?)
+            _UndimAtMouseMove = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("UndimAtMouseMove"))
+        End Set
+    End Property
+
+#End Region
+#Region "Save / load"
+
+    Private Const GlobalKeyword As String = "(global)"
+
+    Public Sub Save()
+
+        Dim xml As New XmlDocument
+        Dim root As XmlNode = xml.AppendChild(xml.CreateElement("DimArea"))
+
+        For Each prop As PropertyInfo In Me.GetType.GetProperties.Where(Function(p As PropertyInfo) p.DeclaringType = GetType(DimArea))
+
+            Dim n As XmlNode = root.AppendChild(xml.CreateElement(prop.Name))
+
+            Dim v As Object = prop.GetValue(Me, {True})
+            If v IsNot Nothing Then
+                n.InnerText = v.ToString
+            Else
+                n.InnerText = GlobalKeyword
+            End If
+
+        Next
+
+        xml.Save(DimAreaStore.FullName + "\" + UID.ToString + ".xml")
+
+    End Sub
+
+    Private Shared Function Load(File As FileInfo) As DimArea
+        If File.Exists And File.Extension = ".xml" Then
+
+            Dim da As New DimArea
+
+            Dim xml As New XmlDocument
+            xml.Load(File.FullName)
+
+            For Each prop As PropertyInfo In GetType(DimArea).GetProperties.Where(Function(p As PropertyInfo) p.DeclaringType = GetType(DimArea))
+                If xml("DimArea")(prop.Name) IsNot Nothing Then
+
+                    Dim v As String = xml("DimArea")(prop.Name).InnerText
+                    Dim val As Object = Nothing
+
+                    If Not v = GlobalKeyword Then
+
+                        If prop.PropertyType Is GetType(String) Then
+                            val = v
+                        ElseIf prop.PropertyType Is GetType(Rect) Then
+                            val = Rect.Parse(v)
+                        ElseIf prop.PropertyType Is GetType(Color?) Then
+                            val = ParseColor(v)
+                        ElseIf prop.PropertyType Is GetType(Double?) Then
+                            val = Double.Parse(v)
+                        ElseIf prop.PropertyType Is GetType(TimeSpan?) Then
+                            val = TimeSpan.Parse(v)
+                        ElseIf prop.PropertyType Is GetType(Duration?) Then
+                            val = New Duration(TimeSpan.Parse(v))
+                        ElseIf prop.PropertyType Is GetType(TransitionEnum?) Then
+                            val = [Enum].Parse(GetType(TransitionEnum), v)
+                        ElseIf prop.PropertyType Is GetType(Boolean?) Then
+                            val = Boolean.Parse(v)
+                        End If
+
+                    End If
+
+                    If val IsNot Nothing And prop.CanWrite Then
+                        'TODO: timespan value wrong after setting property
+                        MsgBox(val.ToString, , prop.Name)
+                        prop.SetValue(da, val, {False})
+                        If prop.GetValue(da, {True}) IsNot Nothing Then
+                            MsgBox(prop.GetValue(da, {True}).ToString, , prop.Name)
+                        End If
+                    End If
+
+                End If
+
+            Next
+
+            Return da
+
+        Else
+            Throw New ArgumentException("", New InvalidDataException("The file could not be found or was not a valid xml file."))
+        End If
+    End Function
+
+#End Region
+
+End Class

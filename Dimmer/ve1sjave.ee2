@@ -1,0 +1,241 @@
+﻿Imports System.Xml
+Imports System.Xml.Serialization
+Imports System.IO
+Imports System.Drawing.Drawing2D
+Imports System.ComponentModel
+
+<XmlRoot("DimArea")>
+Public NotInheritable Class DimArea
+    Inherits DependencyObject
+
+    '--Stores information about--
+    'Name
+    'Bounds
+    'Shape
+    'Color
+    'Opacity
+    'DimDelay
+    'Transition
+    'TransitionDuration
+    'HideMouse
+    'MouseHideDelay
+    'UndimAtMouseMove
+
+    <XmlAttribute("UID")>
+    Public ReadOnly UID As Guid
+
+#Region "Constructors"
+
+    'Private Sub New()
+    'End Sub
+
+    Private Sub New(Name As String, UID As Guid, Bounds As Rectangle, Shape As GraphicsPath, Color As Color, Opacity As Double, DimDelay As TimeSpan, Transition As VisualTransition, TransitionDuration As Duration, HideMouse As Boolean, MouseHideDelay As TimeSpan, UndimAtMouseMove As Boolean)
+        Me.Name = Name
+        Me.UID = UID
+        Me.Bounds = Bounds
+        Me.Shape = Shape
+        Me.Color = Color
+        Me.Opacity = Opacity
+        Me.DimDelay = DimDelay
+        Me.Transition = Transition
+        Me.TransitionDuration = TransitionDuration
+        Me.HideMouse = HideMouse
+        Me.MouseHideDelay = MouseHideDelay
+        Me.UndimAtMouseMove = UndimAtMouseMove
+    End Sub
+
+    Public Shared Function CreateNew(Name As String, Bounds As Rectangle, Shape As GraphicsPath, Color As Color, Opacity As Double, DimDelay As TimeSpan, Transition As VisualTransition, TransitionDuration As Duration, HideMouse As Boolean, MouseHideDelay As TimeSpan, UndimAtMouseMove As Boolean) As DimArea
+        Return New DimArea(Name, Guid.NewGuid, Bounds, Shape, Color, Opacity, DimDelay, Transition, TransitionDuration, HideMouse, MouseHideDelay, UndimAtMouseMove)
+    End Function
+
+    Public Shared Function CreateNew(Name As String) As DimArea
+        Return CreateNew(Name, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing)
+    End Function
+
+    Public Shared Function FromDisk(File As FileInfo, Optional ThrowError As Boolean = False) As DimArea
+        Try
+            Return Load(File)
+        Catch ex As ArgumentException
+
+            MessageBox.Show("Could not load dimarea '" + Path.GetFileNameWithoutExtension(File.FullName) + "':" + vbNewLine + _
+                ex.InnerException.Message)
+
+            If ThrowError Then
+                Throw ex
+            Else
+                Return Nothing
+            End If
+
+        End Try
+    End Function
+
+#End Region
+#Region "Properties"
+
+    Public Shared ReadOnly NameProperty As DependencyProperty = DependencyProperty.Register("Name", GetType(String), GetType(DimArea))
+
+    Public Shared ReadOnly BoundsProperty As DependencyProperty = DependencyProperty.Register("Bounds", GetType(Rectangle), GetType(DimArea))
+    Public Shared ReadOnly ShapeProperty As DependencyProperty = DependencyProperty.Register("Shape", GetType(GraphicsPath), GetType(DimArea))
+
+    Public Shared ReadOnly ColorProperty As DependencyProperty = DependencyProperty.Register("Color", GetType(Color), GetType(DimArea))
+    Public Shared ReadOnly OpacityProperty As DependencyProperty = DependencyProperty.Register("Opacity", GetType(Double), GetType(DimArea))
+    Public Shared ReadOnly DimDelayProperty As DependencyProperty = DependencyProperty.Register("DimDelay", GetType(TimeSpan), GetType(DimArea))
+
+    Public Shared ReadOnly TransitionProperty As DependencyProperty = DependencyProperty.Register("Transition", GetType(VisualTransition), GetType(DimArea))
+    Public Shared ReadOnly TransitionDurationProperty As DependencyProperty = DependencyProperty.Register("TransitionDuration", GetType(Duration), GetType(DimArea))
+
+    Public Shared ReadOnly HideMouseProperty As DependencyProperty = DependencyProperty.Register("HideMouse", GetType(Boolean), GetType(DimArea))
+    Public Shared ReadOnly MouseHideDelayProperty As DependencyProperty = DependencyProperty.Register("MouseHideDelay", GetType(TimeSpan), GetType(DimArea))
+    Public Shared ReadOnly UndimAtMouseMoveProperty As DependencyProperty = DependencyProperty.Register("UndimAtMouseMove", GetType(Boolean), GetType(DimArea))
+
+    <XmlAttribute("Name")>
+    Public Property Name As String
+        Get
+            Return Me.GetValue(NameProperty)
+        End Get
+        Set(value As String)
+            Me.SetValue(NameProperty, value)
+        End Set
+    End Property
+
+
+    <XmlAttribute("Bounds")>
+    Public Property Bounds As Rectangle
+        Get
+            Return Me.GetValue(BoundsProperty)
+        End Get
+        Set(value As Rectangle)
+            Me.SetValue(BoundsProperty, value)
+        End Set
+    End Property
+
+    <XmlAttribute("Shape")>
+    Public Property Shape As GraphicsPath
+        Get
+            Return Me.GetValue(ShapeProperty)
+        End Get
+        Set(value As GraphicsPath)
+            Me.SetValue(ShapeProperty, value)
+        End Set
+    End Property
+
+
+    <XmlAttribute("Color")>
+    Public Property Color As Color
+        Get
+            Return Me.GetValue(ColorProperty)
+        End Get
+        Set(value As Color)
+            Me.SetValue(ColorProperty, value)
+        End Set
+    End Property
+
+    <XmlAttribute("Opacity")>
+    Public Property Opacity As Double
+        Get
+            Return Me.GetValue(OpacityProperty)
+        End Get
+        Set(value As Double)
+            Me.SetValue(OpacityProperty, value)
+        End Set
+    End Property
+
+    <XmlAttribute("DimDelay")>
+    Public Property DimDelay As TimeSpan
+        Get
+            Return Me.GetValue(DimDelayProperty)
+        End Get
+        Set(value As TimeSpan)
+            Me.SetValue(DimDelayProperty, value)
+        End Set
+    End Property
+
+
+    <XmlAttribute("Transition")>
+    Public Property Transition As VisualTransition
+        Get
+            Return Me.GetValue(TransitionProperty)
+        End Get
+        Set(value As VisualTransition)
+            Me.SetValue(TransitionProperty, value)
+        End Set
+    End Property
+
+    <XmlAttribute("TransitionDuration")>
+    Public Property TransitionDuration As Duration
+        Get
+            Return Me.GetValue(TransitionDurationProperty)
+        End Get
+        Set(value As Duration)
+            Me.SetValue(TransitionDurationProperty, value)
+        End Set
+    End Property
+
+
+    <XmlAttribute("HideMouse")>
+    Public Property HideMouse As Boolean
+        Get
+            Return Me.GetValue(HideMouseProperty)
+        End Get
+        Set(value As Boolean)
+            Me.SetValue(HideMouseProperty, value)
+        End Set
+    End Property
+
+    <XmlAttribute("MouseHideDelay")>
+    Public Property MouseHideDelay As TimeSpan
+        Get
+            Return Me.GetValue(MouseHideDelayProperty)
+        End Get
+        Set(value As TimeSpan)
+            Me.SetValue(MouseHideDelayProperty, value)
+        End Set
+    End Property
+
+    <XmlAttribute("UndimAtMouseMove")>
+    Public Property UndimAtMouseMove As Boolean
+        Get
+            Return Me.GetValue(UndimAtMouseMoveProperty)
+        End Get
+        Set(value As Boolean)
+            Me.SetValue(UndimAtMouseMoveProperty, value)
+        End Set
+    End Property
+
+#End Region
+#Region "Save / load"
+
+    Public Sub Save()
+        Using sw As New StreamWriter(DimAreaStore.FullName + "\" + UID.ToString + ".xml")
+
+            Dim xmls As New XmlSerializer(GetType(DimArea))
+            xmls.Serialize(sw, Me)
+
+        End Using
+    End Sub
+
+    Private Shared Function Load(File As FileInfo) As DimArea
+        If File.Exists And File.Extension = ".xml" Then
+
+            Try
+                Using sr As XmlReader = XmlReader.Create(File.FullName)
+
+                    Dim xmls As New XmlSerializer(GetType(DimArea))
+
+                    Return xmls.Deserialize(sr)
+
+                End Using
+            Catch ex As XmlException
+                Throw New ArgumentException("", ex)
+            Catch ex1 As InvalidOperationException
+                Throw New ArgumentException("", ex1)
+            End Try
+
+        Else
+            Throw New ArgumentException("", New InvalidDataException("The file could not be found or was not a valid xml file."))
+        End If
+    End Function
+
+#End Region
+
+End Class
