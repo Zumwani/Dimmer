@@ -2,10 +2,12 @@
 Imports Hardcodet.Wpf.TaskbarNotification
 Imports System.IO
 
+'TODO: Crashes when removing-undo-remove the same item (cannot reproduce though?)
+
 Public Class App
     Inherits Windows.Application
     Implements ISingleInstanceApp
-    'TODO: Settings not saving (only occurs when closing app?)
+
 #Region "Properties"
 
     ''' <summary>The name of this app.</summary>
