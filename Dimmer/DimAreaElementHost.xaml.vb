@@ -86,7 +86,7 @@ Public Class DimAreaElementHost
     End Sub
 
     Private Sub Window_DragEnter(sender As Object, e As DragEventArgs)
-        MyBase.Hide()
+        Hide()
     End Sub
 
     Private timer As New DispatcherTimer(TimeSpan.FromSeconds(5), DispatcherPriority.Normal, Sub()
