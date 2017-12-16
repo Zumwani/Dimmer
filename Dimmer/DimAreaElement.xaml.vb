@@ -174,21 +174,21 @@ Public Class DimAreaElement
 
                                                                                                            End Sub, Me.Dispatcher)
 
-    Private WithEvents redimTimer As New DispatcherTimer
+    Private WithEvents RedimTimer As New DispatcherTimer
 
     Private Sub QueueRedim()
 
         If DimArea.RedimDelay.HasValue AndAlso Not DimArea.RedimDelay.Value.TotalSeconds = 0 And IsEnabled Then
 
             If lastMousePosition = Win32.Managed.CursorPosition AndAlso Not ScreenHasFullscreenApp(Bounds) Then
-                If Not redimTimer.IsEnabled Then
-                    redimTimer.Interval = DimArea.RedimDelay
-                    redimTimer.Start()
+                If Not RedimTimer.IsEnabled Then
+                    RedimTimer.Interval = DimArea.RedimDelay
+                    RedimTimer.Start()
                 End If
             Else
-                redimTimer.Stop()
-                redimTimer.Interval = DimArea.RedimDelay
-                redimTimer.Start()
+                RedimTimer.Stop()
+                RedimTimer.Interval = DimArea.RedimDelay
+                RedimTimer.Start()
             End If
 
         Else
@@ -199,8 +199,8 @@ Public Class DimAreaElement
 
     End Sub
 
-    Private Sub _redim() Handles redimTimer.Tick
-        redimTimer.Stop()
+    Private Sub _Redim() Handles RedimTimer.Tick
+        RedimTimer.Stop()
         If IsEnabled And CanRedim AndAlso Not ScreenHasFullscreenApp(Bounds) Then
             Show()
             ignoreCursorMoveOnce = True

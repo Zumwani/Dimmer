@@ -5,8 +5,6 @@
         xmlns:rules="clr-namespace:Zumwani.Dimmer.ValidationRules"
         xmlns:commands="clr-namespace:Zumwani.Dimmer.Commands"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
-        xmlns:b="http://schemas.microsoft.com/expression/blend/2008"
         Title="Configure Dimareas - Dimmer" WindowStartupLocation="CenterScreen"
         Width="1045" Height="600" MinWidth="1045" MinHeight="580" 
         FontFamily="Segoe UI Semilight" FontSize="14"
@@ -20,7 +18,7 @@
         <ResourceDictionary>
             
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Theme/ConfigWindow.xaml"/>
+                <ResourceDictionary Source="Theme/UI.xaml"/>
                 <ResourceDictionary Source="Credits.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 

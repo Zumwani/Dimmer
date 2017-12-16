@@ -287,6 +287,10 @@ Public Class DimArea
         App.Current.DimAreaManager.Hide(Me)
     End Sub
 
+    Public Sub ToggleEnabled()
+        IsEnabled = Not IsEnabled
+    End Sub
+
 #End Region
 #Region "Removing"
 

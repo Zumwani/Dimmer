@@ -67,11 +67,12 @@ Public Class DimAreaElementHost
     End Sub
 
     Public Overloads Sub Show()
-        If Not Me.IsLoaded Then
+        If Not IsLoaded Then
             MyBase.Show()
         End If
         UpdateSize()
         DimAreaElement.Show()
+        BringToFront()
         timer.Start()
     End Sub
 
@@ -90,9 +91,13 @@ Public Class DimAreaElementHost
     End Sub
 
     Private timer As New DispatcherTimer(TimeSpan.FromSeconds(5), DispatcherPriority.Normal, Sub()
-                                                                                                 Topmost = False
-                                                                                                 Topmost = True
+                                                                                                 BringToFront()
                                                                                              End Sub, App.Current.Dispatcher)
+
+    Private Sub BringToFront()
+        Topmost = False
+        Topmost = True
+    End Sub
 
 #End Region
 
