@@ -6,10 +6,6 @@
         Title="Installing Dimmer..." FontFamily="Segoe UI Semilight" FontSize="14" WindowStartupLocation="CenterScreen" Width="750" Height="450"
         Icon="Assets/Icon.ico" ResizeMode="CanMinimize">
 
-    <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVisibConv"/>
-    </Window.Resources>
-    
     <TabControl HorizontalAlignment="Center" VerticalAlignment="Center" Width="422" Height="250" BorderThickness="0">
 
         <TabControl.Template>
@@ -74,11 +70,8 @@
                 <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left" Grid.Row="2">
                     <Hyperlink Foreground="DodgerBlue" FontSize="14" Command="{commands:CancelCommand}">Cancel</Hyperlink>
                 </TextBlock>
-                <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="2" Visibility="{Binding Source={x:Static local:Application.IsInstalling}, Converter={StaticResource BoolToVisibConv}}">
+                <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="2">
                     <Hyperlink Foreground="DodgerBlue" FontSize="14" Command="{commands:StartSetupCommand}">Install</Hyperlink>
-                </TextBlock>
-                <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="2" Visibility="{Binding Source={x:Static local:Application.IsUninstalling}, Converter={StaticResource BoolToVisibConv}}">
-                    <Hyperlink Foreground="DodgerBlue" FontSize="14" Command="{commands:StartUninstallCommand}">Uninstall</Hyperlink>
                 </TextBlock>
 
             </Grid>
@@ -87,14 +80,13 @@
         <TabItem x:Name="InstallTab">
 
             <Grid>
-                <TextBlock Text="Installing..." VerticalAlignment="Bottom" Margin="0,0,0,5" Visibility="{Binding Source={x:Static local:Application.IsInstalling}, Converter={StaticResource BoolToVisibConv}}"/>
-                <TextBlock Text="Uninstalling..." VerticalAlignment="Bottom" Margin="0,0,0,5" Visibility="{Binding Source={x:Static local:Application.IsUninstalling}, Converter={StaticResource BoolToVisibConv}}"/>
+                <TextBlock Text="Installing..." VerticalAlignment="Bottom" Margin="0,0,0,5"/>
                 <ProgressBar VerticalAlignment="Bottom" Maximum="1" Value="{Binding Source={x:Static local:Setup.Current}, Path=Progress}"/>
             </Grid>
             
         </TabItem>
 
-        <TabItem x:Name="CompletedTab" local:EventToCommand.SelectedCommand="{commands:CloseSetupAndOpenAppCommand}"/>
+        <TabItem x:Name="CompletedTab" local:TabItemExtensions.SelectedCommand="{commands:CloseSetupAndOpenAppCommand}"/>
 
     </TabControl>
 
