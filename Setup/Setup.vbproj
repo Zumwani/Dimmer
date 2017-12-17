@@ -76,6 +76,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\CloseSetupAndOpenAppCommand.vb" />
+    <Compile Include="Commands\GoToTabCommand.vb" />
     <Compile Include="Commands\StartSetupCommand.vb" />
     <Compile Include="Classes\EventBehaviourFactory.vb" />
     <Compile Include="Classes\Setup.vb" />
@@ -89,6 +90,7 @@
     </Compile>
     <Compile Include="Commands\CancelCommand.vb" />
     <Compile Include="Commands\ChangePathCommand.vb" />
+    <Compile Include="Commands\StartUninstallCommand.vb" />
     <Compile Include="MainWindow.xaml.vb">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
