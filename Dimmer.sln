@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Dimmer", "Dimmer\Dimmer.vbproj", "{FF54FD0C-4ADD-401C-8AA7-5963D88C13E9}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{5AC4999A-D497-455F-8561-DD10013BEF06}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Setup", "Setup\Setup.vbproj", "{FABC9CBC-07D6-40BC-B2CE-74B0DAF03595}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,15 @@ Global
 		{FF54FD0C-4ADD-401C-8AA7-5963D88C13E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF54FD0C-4ADD-401C-8AA7-5963D88C13E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF54FD0C-4ADD-401C-8AA7-5963D88C13E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5AC4999A-D497-455F-8561-DD10013BEF06}.Debug|Any CPU.ActiveCfg = Debug
-		{5AC4999A-D497-455F-8561-DD10013BEF06}.Release|Any CPU.ActiveCfg = Release
+		{FABC9CBC-07D6-40BC-B2CE-74B0DAF03595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FABC9CBC-07D6-40BC-B2CE-74B0DAF03595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FABC9CBC-07D6-40BC-B2CE-74B0DAF03595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FABC9CBC-07D6-40BC-B2CE-74B0DAF03595}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8C1CA1A6-EB48-432B-85E1-3B0E866C7C00}
 	EndGlobalSection
 EndGlobal

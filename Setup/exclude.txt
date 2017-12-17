@@ -1,0 +1,10 @@
+﻿//This file specifies a list of files to exclude
+Xceed.Wpf.AvalonDock.resources.dll
+.pdb\
+.xml\
+.config\
+Xceed.Wpf.AvalonDock.dll
+Xceed.Wpf.AvalonDock.Themes.Aero.dll
+Xceed.Wpf.AvalonDock.Themes.Metro.dll
+Xceed.Wpf.AvalonDock.Themes.VS2010.dll
+Xceed.Wpf.DataGrid.dll
