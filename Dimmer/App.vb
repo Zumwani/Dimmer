@@ -4,6 +4,7 @@ Imports System.IO
 
 'TODO: Crashes when removing-undo-remove the same item (cannot reproduce though?)
 
+
 Public Class App
     Inherits Windows.Application
     Implements ISingleInstanceApp
